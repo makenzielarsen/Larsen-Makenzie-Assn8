@@ -15,7 +15,8 @@ public class Main extends Application {
         AnchorPane page = (AnchorPane) loader.load();
 
         primaryStage.setTitle("MineSweeper(ish)");
-        primaryStage.setScene(new Scene(page, 600, 500));
+        primaryStage.setScene(new Scene(page));
+        primaryStage.sizeToScene();
         primaryStage.setResizable(false);
 
         Controller controller = loader.getController();

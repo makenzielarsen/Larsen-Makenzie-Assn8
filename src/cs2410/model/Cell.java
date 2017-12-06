@@ -1,6 +1,8 @@
 package cs2410.model;
 
-public class Cell {
+import javafx.scene.control.Button;
+
+public class Cell extends Button {
     private boolean isBomb = false;
     private boolean isFlagged;
     private boolean isClicked;
@@ -34,10 +36,11 @@ public class Cell {
         return isQuestionable;
     }
 
-    Cell(boolean bomb) {
+    public Cell(boolean bomb) {
         isBomb = bomb;
         isFlagged = false;
         isClicked = false;
         isQuestionable = false;
+        setPrefSize(20, 20);
     }
 }

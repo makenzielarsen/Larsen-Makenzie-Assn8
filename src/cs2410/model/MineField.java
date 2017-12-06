@@ -18,7 +18,7 @@ public class MineField {
         randomizeBombs();
     }
 
-    void randomizeBombs() {
+    private void randomizeBombs() {
         for(int i = 0; i < totalBombs; i++) {
             grid.add(new Cell(true));
         }
@@ -33,7 +33,7 @@ public class MineField {
         return x + (y * width);
     }
 
-    Cell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return grid.get(getIndex(x, y));
     }
 
