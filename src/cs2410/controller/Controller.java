@@ -12,11 +12,11 @@ public class Controller {
     }
 
     public void clickedCell() {
-
-    }
-
-    public void clickedBomb() {
-
+        //mark as clicked
+        //update all cells
+        //check won
+        //check lost
+        
     }
 
     public void clickedReset() {
