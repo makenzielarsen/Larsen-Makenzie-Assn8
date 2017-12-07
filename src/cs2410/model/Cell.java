@@ -41,6 +41,6 @@ public class Cell extends Button {
         isFlagged = false;
         isClicked = false;
         isQuestionable = false;
-        setPrefSize(20, 20);
+        setPrefSize(20, 10);
     }
 }

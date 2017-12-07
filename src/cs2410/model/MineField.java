@@ -60,7 +60,7 @@ public class MineField {
         return true;
     }
 
-    int numberBombsLeft() {
+    public int numberBombsLeft() {
         int totalFlags = 0;
         for(Cell cell: grid) {
             if(cell.isFlagged()) {
