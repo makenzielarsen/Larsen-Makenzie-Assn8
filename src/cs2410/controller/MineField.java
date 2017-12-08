@@ -138,10 +138,37 @@ public class MineField {
 
     public void click(int x, int y) {
         Cell cell = getCell(x, y);
-        if(cell.isFlagged() || cell.isQuestionable()) {
+        if(cell.isFlagged() || cell.isQuestionable() || cell.isClicked()) {
             return;
         }
-        getCell(x, y).setClicked(true);
+        cell.setClicked(true);
+
+        if(cell.getNeighboringBombs() == 0) {
+            if (x > 0 && y > 0) {
+                click(x - 1, y - 1);
+            }
+            if (y > 0) {
+                click(x, y - 1);
+            }
+            if (x < width - 1 && y > 0) {
+                click(x + 1, y - 1);
+            }
+            if (x > 0) {
+                click(x - 1, y);
+            }
+            if (x < width - 1) {
+                click(x + 1, y);
+            }
+            if (x > 0 && y < height - 1) {
+                click(x - 1, y + 1);
+            }
+            if (y < height - 1) {
+                click(x, y + 1);
+            }
+            if (x < width - 1 && y < height - 1) {
+                click(x + 1, y + 1);
+            }
+        }
     }
 
     public void endGame() {

@@ -202,32 +202,6 @@ public class Controller {
                 if(!muteButton.isSelected()) {
                     buttonClick.play();
                 }
-                if(buttonCell.getNeighboringBombs() == 0) {
-                    if (x > 0 && y > 0) {
-                        mineField.click(x - 1, y - 1);
-                    }
-                    if (y > 0) {
-                        mineField.click(x, y - 1);
-                    }
-                    if (x < column - 1 && y > 0) {
-                        mineField.click(x + 1, y - 1);
-                    }
-                    if (x > 0) {
-                        mineField.click(x - 1, y);
-                    }
-                    if (x < column - 1) {
-                        mineField.click(x + 1, y);
-                    }
-                    if (x > 0 && y < row - 1) {
-                        mineField.click(x - 1, y + 1);
-                    }
-                    if (y < row - 1) {
-                        mineField.click(x, y + 1);
-                    }
-                    if (x < column - 1 && y < row - 1) {
-                        mineField.click(x + 1, y + 1);
-                    }
-                }
             }
 
             mineField.refreshCells();
