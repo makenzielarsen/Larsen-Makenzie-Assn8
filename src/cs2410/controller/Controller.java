@@ -57,10 +57,10 @@ public class Controller {
             for(int j = 0; j < column; j++) {
                 Cell buttonCell = mineField.getCell(i, j);
                 if(!muteButton.isSelected()) {
-                    muteButton.setText("UnMute");
+                    muteButton.setText("Mute");
                     buttonCell.setMuted(true);
                 } else {
-                    muteButton.setText("Mute");
+                    muteButton.setText("unMute");
                     buttonCell.setMuted(false);
                 }
 
@@ -180,7 +180,7 @@ public class Controller {
         int y = buttonCell.getY();
 
         if(actionEvent.isSecondaryButtonDown()) {
-            if (!buttonCell.getMuted()) {
+            if (!muteButton.isSelected()) {
                 rightClickBeep.play();
             }
             if(buttonCell.isFlagged()) {
@@ -199,7 +199,9 @@ public class Controller {
         } else {
             if(!buttonCell.isFlagged() && !buttonCell.isQuestionable()) {
                 mineField.click(x, y);
-                buttonClick.play();
+                if(!muteButton.isSelected()) {
+                    buttonClick.play();
+                }
                 if(buttonCell.getNeighboringBombs() == 0) {
                     if (x > 0 && y > 0) {
                         mineField.click(x - 1, y - 1);
@@ -231,14 +233,18 @@ public class Controller {
             mineField.refreshCells();
 
             if(mineField.hasLost()) {
-                bombClip.play();
+                if(!muteButton.isSelected()) {
+                    bombClip.play();
+                }
                 animationTimer.stop();
                 long elapsedMillis = System.currentTimeMillis() - startTime;
                 endTime = Long.toString(elapsedMillis / 1000);
                 firstClick = true;
                 startButton.setText("Start");
 
-                youLoseClip.play();
+                if(!muteButton.isSelected()) {
+                    youLoseClip.play();
+                }
                 Alert youLost = new Alert(Alert.AlertType.INFORMATION);
                 youLost.setTitle("Game Over");
                 youLost.setHeaderText("You Lost.");
@@ -251,7 +257,10 @@ public class Controller {
                 firstClick = true;
                 startButton.setText("Start");
 
-                youWonClip.play();
+                if(!muteButton.isSelected()) {
+                    youWonClip.play();
+                }
+
                 Alert youWon = new Alert(Alert.AlertType.INFORMATION);
                 youWon.setTitle("Game Over");
                 youWon.setHeaderText("You Won!");
