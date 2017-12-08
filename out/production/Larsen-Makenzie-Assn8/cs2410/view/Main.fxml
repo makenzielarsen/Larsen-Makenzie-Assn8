@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,14 +15,11 @@
       <BorderPane prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <BorderPane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-               <top>
-                  <Button fx:id="startButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#pressedStart" text="Start" BorderPane.alignment="CENTER" />
-               </top>
                <padding>
                   <Insets bottom="5.0" top="5.0" />
                </padding>
                <center>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" maxWidth="250.0" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label text="Difficulty: ">
                            <font>
@@ -33,7 +31,7 @@
                   </HBox>
                </center>
                <bottom>
-                  <HBox alignment="CENTER" prefHeight="27.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" maxWidth="250.0" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label text="Size: ">
                            <font>
@@ -42,26 +40,50 @@
                         </Label>
                         <ChoiceBox fx:id="difficultyLevelBox" prefWidth="150.0" />
                      </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
                   </HBox>
                </bottom>
                <left>
-                  <Label fx:id="bombsLeft" BorderPane.alignment="CENTER">
+                  <Label fx:id="bombsLeft" minHeight="30.0" prefHeight="30.0" BorderPane.alignment="TOP_CENTER">
                      <padding>
                         <Insets left="53.0" />
                      </padding>
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" />
+                     </BorderPane.margin>
                   </Label>
                </left>
                <right>
-                  <Label fx:id="timeElapsed" BorderPane.alignment="CENTER">
+                  <Label fx:id="timeElapsed" minHeight="30.0" prefHeight="30.0" BorderPane.alignment="TOP_CENTER">
                      <padding>
                         <Insets right="100.0" />
                      </padding>
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" />
+                     </BorderPane.margin>
                   </Label>
                </right>
+               <top>
+                  <HBox prefHeight="50.0" prefWidth="50.0" spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="startButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#pressedStart" text="Start" />
+                        <ToggleButton fx:id="muteButton" mnemonicParsing="false" onAction="#muteSounds" text="Mute" />
+                     </children>
+                     <padding>
+                        <Insets left="250.0" />
+                     </padding>
+                  </HBox>
+               </top>
             </BorderPane>
          </top>
          <center>
-            <BorderPane fx:id="gridPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT" />
+            <BorderPane fx:id="gridPane" minHeight="400.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </BorderPane>
          </center>
       </BorderPane>
    </children>

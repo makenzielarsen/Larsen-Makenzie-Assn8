@@ -6,14 +6,15 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.AudioClip;
+
+import java.io.File;
 
 public class Controller {
     View view = new View();
@@ -26,9 +27,17 @@ public class Controller {
     long startTime;
     String endTime;
     boolean firstClick = true;
+    private AudioClip buttonClick = new AudioClip(new File("images/normalButtonClip.mp3").toURI().toString());
+    private AudioClip rightClickBeep = new AudioClip(new File("images/beep.mp3").toURI().toString());
+    private AudioClip bombClip = new AudioClip(new File("images/bomb.mp3").toURI().toString());
+    private AudioClip youWonClip = new AudioClip(new File("images/youWon.mp3").toURI().toString());
+    private AudioClip youLoseClip = new AudioClip(new File("images/youLose.mp3").toURI().toString());
+
 
     @FXML
     Button startButton;
+    @FXML
+    ToggleButton muteButton;
     @FXML
     Label bombsLeft = new Label();
     @FXML
@@ -43,11 +52,34 @@ public class Controller {
     private BorderPane gridPane = new BorderPane();
 
     @FXML
+    private void muteSounds() {
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < column; j++) {
+                Cell buttonCell = mineField.getCell(i, j);
+                if(!muteButton.isSelected()) {
+                    muteButton.setText("UnMute");
+                    buttonCell.setMuted(true);
+                } else {
+                    muteButton.setText("Mute");
+                    buttonCell.setMuted(false);
+                }
+
+            }
+        }
+    }
+
+    @FXML
     public void initialize() {
         difficultyLevelBox.getItems().addAll("Easy", "Medium", "Hard");
         sizeBox.getItems().addAll("Small", "Medium", "Large");
         setBombsLeft("0");
         setTimeElapsed("0");
+
+        Alert implementationInformation = new Alert(Alert.AlertType.INFORMATION);
+        implementationInformation.setTitle("Information for the TA");
+        implementationInformation.setHeaderText(null);
+        implementationInformation.setContentText("I chose to implement: \n (10 points) The size feature \n (10 points) The Difficulty Feature \n (15 points) Sounds");
+        implementationInformation.showAndWait();
     }
 
     private void setBombsLeft(String bombs) {
@@ -60,7 +92,15 @@ public class Controller {
 
     @FXML
     private void pressedStart() {
+        if(difficultyLevelBox.getValue() == "") {
+            return;
+        }
+        if(sizeBox.getValue() == "") {
+            return;
+        }
+
         startButton.setText("Restart");
+
         if(difficultyLevelBox.getValue() == "Easy") {
             bombPercentage = 0.1;
         } else if(difficultyLevelBox.getValue() == "Medium") {
@@ -83,6 +123,8 @@ public class Controller {
             mineField = new MineField(column, row, bombPercentage);
         }
 
+        sizeBox.getSelectionModel().selectedIndexProperty().addListener(e -> sizeChanged());
+
         grid = new GridPane();
 
         for(int i = 0; i < row; i++) {
@@ -93,7 +135,6 @@ public class Controller {
                 }
                 Cell buttonCell = mineField.getCell(i, j);
                 buttonCell.setOnMousePressed(e -> clickedCell(e));
-//                buttonCell.setOnAction(e -> clickedCell(e));
                 grid.add(buttonCell, i, j);
             }
         }
@@ -105,6 +146,16 @@ public class Controller {
         grid.setVgap(10);
         grid.setAlignment(Pos.CENTER);
         gridPane.setCenter(grid);
+    }
+
+    private void sizeChanged() {
+        animationTimer.stop();
+        long elapsedMillis = System.currentTimeMillis() - startTime;
+        endTime = Long.toString(elapsedMillis / 1000);
+        firstClick = true;
+        startButton.setText("Start");
+
+        mineField.endGame();
     }
 
     public void clickedCell(MouseEvent actionEvent) {
@@ -129,6 +180,9 @@ public class Controller {
         int y = buttonCell.getY();
 
         if(actionEvent.isSecondaryButtonDown()) {
+            if (!buttonCell.getMuted()) {
+                rightClickBeep.play();
+            }
             if(buttonCell.isFlagged()) {
                 buttonCell.setFlagged(false);
                 buttonCell.setQuestionable(true);
@@ -145,6 +199,7 @@ public class Controller {
         } else {
             if(!buttonCell.isFlagged() && !buttonCell.isQuestionable()) {
                 mineField.click(x, y);
+                buttonClick.play();
                 if(buttonCell.getNeighboringBombs() == 0) {
                     if (x > 0 && y > 0) {
                         mineField.click(x - 1, y - 1);
@@ -176,18 +231,32 @@ public class Controller {
             mineField.refreshCells();
 
             if(mineField.hasLost()) {
+                bombClip.play();
                 animationTimer.stop();
                 long elapsedMillis = System.currentTimeMillis() - startTime;
                 endTime = Long.toString(elapsedMillis / 1000);
                 firstClick = true;
                 startButton.setText("Start");
+
+                youLoseClip.play();
+                Alert youLost = new Alert(Alert.AlertType.INFORMATION);
+                youLost.setTitle("Game Over");
+                youLost.setHeaderText("You Lost.");
+                youLost.setContentText("Better luck next time!");
+                youLost.showAndWait();
             } else if(mineField.hasWon()){
                 animationTimer.stop();
                 long elapsedMillis = System.currentTimeMillis() - startTime;
                 endTime = Long.toString(elapsedMillis / 1000);
                 firstClick = true;
                 startButton.setText("Start");
-                //WINNER SHIT
+
+                youWonClip.play();
+                Alert youWon = new Alert(Alert.AlertType.INFORMATION);
+                youWon.setTitle("Game Over");
+                youWon.setHeaderText("You Won!");
+                youWon.setContentText("You won in " + endTime + " seconds.");
+                youWon.showAndWait();
             }
         }
         setBombsLeft(String.valueOf(mineField.numberBombsLeft()));

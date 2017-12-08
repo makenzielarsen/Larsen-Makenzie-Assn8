@@ -4,6 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 
 import java.io.File;
 
@@ -24,6 +25,7 @@ public class Cell extends ToggleButton {
     private boolean isFlagged;
     private boolean isClicked;
     private boolean isQuestionable;
+    private boolean isMuted;
     private int x;
     private int y;
     private int neighboringBombs;
@@ -34,6 +36,7 @@ public class Cell extends ToggleButton {
         isFlagged = false;
         isClicked = false;
         isQuestionable = false;
+        isMuted = false;
 
         flagImageView.setFitHeight(10);
         flagImageView.setFitWidth(10);
@@ -118,6 +121,14 @@ public class Cell extends ToggleButton {
 
     public boolean isQuestionable() {
         return isQuestionable;
+    }
+
+    public void setMuted(boolean mute) {
+        isMuted = mute;
+    }
+
+    public boolean getMuted() {
+        return isMuted;
     }
 
     public int getX() {

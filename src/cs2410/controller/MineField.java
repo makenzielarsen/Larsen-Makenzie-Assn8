@@ -144,6 +144,12 @@ public class MineField {
         getCell(x, y).setClicked(true);
     }
 
+    public void endGame() {
+        for(Cell cell : grid) {
+            cell.updateCell(true);
+        }
+    }
+
     public void refreshCells() {
         boolean gameOver = false;
         if(hasWon()) {
