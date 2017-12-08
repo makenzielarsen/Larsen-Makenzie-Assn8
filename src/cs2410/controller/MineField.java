@@ -118,6 +118,11 @@ public class MineField {
                 return false;
             }
         }
+        for(Cell cell: grid) {
+            if(cell.isBomb()) {
+                cell.setFlagged(true);
+            }
+        }
         return true;
     }
 

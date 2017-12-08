@@ -15,6 +15,11 @@ public class Cell extends ToggleButton {
     private ImageView oneImageView = new ImageView(new Image(new File("images/one.png").toURI().toString()));
     private ImageView twoImageView = new ImageView(new Image(new File("images/two.png").toURI().toString()));
     private ImageView threeImageView = new ImageView(new Image(new File("images/three.png").toURI().toString()));
+    private ImageView fourImageView = new ImageView(new Image(new File("images/four.png").toURI().toString()));
+    private ImageView fiveImageView = new ImageView(new Image(new File("images/five.png").toURI().toString()));
+    private ImageView sixImageView = new ImageView(new Image(new File("images/six.png").toURI().toString()));
+    private ImageView sevenImageView = new ImageView(new Image(new File("images/seven.png").toURI().toString()));
+    private ImageView eightImageView = new ImageView(new Image(new File("images/eight.png").toURI().toString()));
     private boolean isBomb;
     private boolean isFlagged;
     private boolean isClicked;
@@ -48,6 +53,21 @@ public class Cell extends ToggleButton {
         threeImageView.setFitHeight(10);
         threeImageView.setFitWidth(10);
         threeImageView.setPreserveRatio(true);
+        fourImageView.setFitHeight(10);
+        fourImageView.setFitWidth(10);
+        fourImageView.setPreserveRatio(true);
+        fiveImageView.setFitHeight(10);
+        fiveImageView.setFitWidth(10);
+        fiveImageView.setPreserveRatio(true);
+        sixImageView.setFitHeight(10);
+        sixImageView.setFitWidth(10);
+        sixImageView.setPreserveRatio(true);
+        sevenImageView.setFitHeight(10);
+        sevenImageView.setFitWidth(10);
+        sevenImageView.setPreserveRatio(true);
+        eightImageView.setFitHeight(10);
+        eightImageView.setFitWidth(10);
+        eightImageView.setPreserveRatio(true);
         emptyImageView.setFitHeight(20);
         emptyImageView.setFitWidth(10);
         emptyImageView.setPreserveRatio(true);
@@ -66,6 +86,10 @@ public class Cell extends ToggleButton {
 
     public void setNeighboringBombs(int bombs) {
         neighboringBombs = bombs;
+    }
+
+    public int getNeighboringBombs() {
+        return neighboringBombs;
     }
 
     public boolean isBomb() {
@@ -111,15 +135,26 @@ public class Cell extends ToggleButton {
             setGraphic(flagImageView);
         } else if(isQuestionable()) {
             setGraphic(questionImageView);
-        } else if(isClicked()) {
+        } else if(isClicked() && !isFlagged && !isQuestionable) {
             if(neighboringBombs == 1) {
                 setGraphic(oneImageView);
             } else if(neighboringBombs == 2) {
                 setGraphic(twoImageView);
             } else if(neighboringBombs == 3) {
                 setGraphic(threeImageView);
+            } else if(neighboringBombs == 4) {
+                setGraphic(fourImageView);
+            } else if(neighboringBombs == 5) {
+                setGraphic(fiveImageView);
+            } else if(neighboringBombs == 6) {
+                setGraphic(sixImageView);
+            } else if(neighboringBombs == 7) {
+                setGraphic(sevenImageView);
+            } else if(neighboringBombs == 8) {
+                setGraphic(eightImageView);
             }
         }
+
         if(gameIsOver) {
             if(isBomb() && !isFlagged()) {
                 setGraphic(bombImageView);
@@ -128,11 +163,23 @@ public class Cell extends ToggleButton {
                 setGraphic(bombImageView);
                 setStyle("-fx-background-color: green");
             } else if(!isBomb() && isFlagged()) {
-                setGraphic(bombImageView);
                 setStyle("-fx-background-color: yellow");
             } else {
                 setGraphic(emptyImageView);
             }
+            setDisable(true);
         }
+
+        if(isClicked()) {
+            setDisable(true);
+        }
+
+        if(isFlagged || isQuestionable) {
+            setSelected(false);
+        }
+    }
+
+    public void clearGraphic() {
+        setGraphic(emptyImageView);
     }
 }

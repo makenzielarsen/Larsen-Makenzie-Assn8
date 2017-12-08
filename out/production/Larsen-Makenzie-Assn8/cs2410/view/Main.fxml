@@ -15,7 +15,7 @@
          <top>
             <BorderPane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <top>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#pressedStart" text="Start" BorderPane.alignment="CENTER" />
+                  <Button fx:id="startButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#pressedStart" text="Start" BorderPane.alignment="CENTER" />
                </top>
                <padding>
                   <Insets bottom="5.0" top="5.0" />

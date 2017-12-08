@@ -6,8 +6,10 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -23,7 +25,10 @@ public class Controller {
     AnimationTimer animationTimer;
     long startTime;
     String endTime;
+    boolean firstClick = true;
 
+    @FXML
+    Button startButton;
     @FXML
     Label bombsLeft = new Label();
     @FXML
@@ -55,6 +60,7 @@ public class Controller {
 
     @FXML
     private void pressedStart() {
+        startButton.setText("Restart");
         if(difficultyLevelBox.getValue() == "Easy") {
             bombPercentage = 0.1;
         } else if(difficultyLevelBox.getValue() == "Medium") {
@@ -86,7 +92,8 @@ public class Controller {
                     grid.getColumnConstraints().add(new ColumnConstraints(20));
                 }
                 Cell buttonCell = mineField.getCell(i, j);
-                buttonCell.setOnAction(e -> clickedCell(e));
+                buttonCell.setOnMousePressed(e -> clickedCell(e));
+//                buttonCell.setOnAction(e -> clickedCell(e));
                 grid.add(buttonCell, i, j);
             }
         }
@@ -94,37 +101,96 @@ public class Controller {
         setBombsLeft(String.valueOf(mineField.numberBombsLeft()));
         setTimeElapsed("0");
 
-        startTime = System.currentTimeMillis();
-
-        animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                long elapsedMillis;
-                elapsedMillis = System.currentTimeMillis() - startTime;
-                setTimeElapsed(Long.toString(elapsedMillis / 1000));
-            }
-        };
-
-        animationTimer.start();
-
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setAlignment(Pos.CENTER);
         gridPane.setCenter(grid);
     }
 
-    public void clickedCell(ActionEvent actionEvent) {
+    public void clickedCell(MouseEvent actionEvent) {
+        if(firstClick) {
+            startTime = System.currentTimeMillis();
+
+            animationTimer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    long elapsedMillis;
+                    elapsedMillis = System.currentTimeMillis() - startTime;
+                    setTimeElapsed(Long.toString(elapsedMillis / 1000));
+                }
+            };
+
+            animationTimer.start();
+            firstClick = false;
+        }
+
         Cell buttonCell = (Cell)actionEvent.getSource();
         int x = buttonCell.getX();
         int y = buttonCell.getY();
 
-        mineField.click(x, y);
-        mineField.refreshCells();
-        if(mineField.hasLost()) {
-            animationTimer.stop();
-            long elapsedMillis = System.currentTimeMillis() - startTime;
-            endTime = Long.toString(elapsedMillis / 1000);
+        if(actionEvent.isSecondaryButtonDown()) {
+            if(buttonCell.isFlagged()) {
+                buttonCell.setFlagged(false);
+                buttonCell.setQuestionable(true);
+                buttonCell.updateCell(mineField.hasLost());
+            } else if(buttonCell.isQuestionable()) {
+                buttonCell.setQuestionable(false);
+                buttonCell.clearGraphic();
+                buttonCell.updateCell(mineField.hasLost());
+            } else if(mineField.numberBombsLeft() > 0) {
+                buttonCell.setFlagged(true);
+                buttonCell.updateCell(mineField.hasLost());
+            }
+            buttonCell.setSelected(false);
+        } else {
+            if(!buttonCell.isFlagged() && !buttonCell.isQuestionable()) {
+                mineField.click(x, y);
+                if(buttonCell.getNeighboringBombs() == 0) {
+                    if (x > 0 && y > 0) {
+                        mineField.click(x - 1, y - 1);
+                    }
+                    if (y > 0) {
+                        mineField.click(x, y - 1);
+                    }
+                    if (x < column - 1 && y > 0) {
+                        mineField.click(x + 1, y - 1);
+                    }
+                    if (x > 0) {
+                        mineField.click(x - 1, y);
+                    }
+                    if (x < column - 1) {
+                        mineField.click(x + 1, y);
+                    }
+                    if (x > 0 && y < row - 1) {
+                        mineField.click(x - 1, y + 1);
+                    }
+                    if (y < row - 1) {
+                        mineField.click(x, y + 1);
+                    }
+                    if (x < column - 1 && y < row - 1) {
+                        mineField.click(x + 1, y + 1);
+                    }
+                }
+            }
+
+            mineField.refreshCells();
+
+            if(mineField.hasLost()) {
+                animationTimer.stop();
+                long elapsedMillis = System.currentTimeMillis() - startTime;
+                endTime = Long.toString(elapsedMillis / 1000);
+                firstClick = true;
+                startButton.setText("Start");
+            } else if(mineField.hasWon()){
+                animationTimer.stop();
+                long elapsedMillis = System.currentTimeMillis() - startTime;
+                endTime = Long.toString(elapsedMillis / 1000);
+                firstClick = true;
+                startButton.setText("Start");
+                //WINNER SHIT
+            }
         }
+        setBombsLeft(String.valueOf(mineField.numberBombsLeft()));
     }
 
     public void clickedReset() {
