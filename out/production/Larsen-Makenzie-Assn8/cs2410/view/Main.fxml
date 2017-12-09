@@ -26,7 +26,7 @@
                               <Font name="American Typewriter" size="15.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="sizeBox" prefWidth="150.0" />
+                        <ChoiceBox fx:id="difficultyLevelBox" prefWidth="150.0" />
                      </children>
                   </HBox>
                </center>
@@ -38,7 +38,7 @@
                               <Font name="American Typewriter" size="15.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="difficultyLevelBox" prefWidth="150.0" />
+                        <ChoiceBox fx:id="sizeBox" prefWidth="150.0" />
                      </children>
                      <padding>
                         <Insets top="10.0" />

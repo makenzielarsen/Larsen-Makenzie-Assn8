@@ -126,13 +126,11 @@ public class Controller {
         sizeBox.getSelectionModel().selectedIndexProperty().addListener(e -> sizeChanged());
 
         grid = new GridPane();
+//        grid.getRowConstraints().add(new RowConstraints(10));
+//        grid.getColumnConstraints().add(new ColumnConstraints(10));
 
         for(int i = 0; i < row; i++) {
-            grid.getRowConstraints().add(new RowConstraints(20));
             for(int j = 0; j < column; j++) {
-                if(j == 0) {
-                    grid.getColumnConstraints().add(new ColumnConstraints(20));
-                }
                 Cell buttonCell = mineField.getCell(i, j);
                 buttonCell.setOnMousePressed(e -> clickedCell(e));
                 grid.add(buttonCell, i, j);
@@ -142,8 +140,8 @@ public class Controller {
         setBombsLeft(String.valueOf(mineField.numberBombsLeft()));
         setTimeElapsed("0");
 
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(0);
+        grid.setVgap(0);
         grid.setAlignment(Pos.CENTER);
         gridPane.setCenter(grid);
     }
