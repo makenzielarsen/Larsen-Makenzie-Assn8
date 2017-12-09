@@ -11,11 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
+import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,6 +84,9 @@ public class Controller {
         implementationInformation.setContentText("I chose to implement: \n (10 points) The size feature \n (10 points) The Difficulty Feature \n (15 points) Sounds");
         implementationInformation.showAndWait();
     }
+
+    @FXML
+    AnchorPane originalPane;
 
     private void setBombsLeft(String bombs) {
         bombsLeft.setText("Bombs Left \n " + bombs);
@@ -164,9 +165,11 @@ public class Controller {
         for(int i = 0; i < row; i++) {
             for(int j = 0; j < column; j++) {
                 Cell buttonCell = mineField.getCell(i, j);
-                buttonCell.setOnMousePressed(e -> clickedCell(e));
-                buttonCell.setMinSize(grid.getBoundsInParent().getWidth(), grid.getBoundsInParent().getHeight());
-                grid.add(buttonCell, i, j);
+                if(buttonCell != null) {
+                    buttonCell.setOnMousePressed(e -> clickedCell(e));
+                    buttonCell.setMinSize(grid.getBoundsInParent().getWidth(), grid.getBoundsInParent().getHeight());
+                    grid.add(buttonCell, i, j);
+                }
             }
         }
 
