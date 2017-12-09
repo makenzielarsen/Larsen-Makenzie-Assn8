@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs2410.controller.Controller">
+<AnchorPane prefHeight="645.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs2410.controller.Controller">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -79,7 +79,7 @@
             </BorderPane>
          </top>
          <center>
-            <BorderPane fx:id="gridPane" minHeight="400.0" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
+            <BorderPane fx:id="gridPane" minHeight="400.0" prefHeight="461.0" prefWidth="600.0" BorderPane.alignment="TOP_LEFT">
                <padding>
                   <Insets top="5.0" />
                </padding>

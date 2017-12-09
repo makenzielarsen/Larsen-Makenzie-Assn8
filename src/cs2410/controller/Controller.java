@@ -1,5 +1,6 @@
 package cs2410.controller;
 
+import com.sun.rowset.internal.Row;
 import cs2410.view.Cell;
 import cs2410.view.View;
 import javafx.animation.AnimationTimer;
@@ -7,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -14,6 +17,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.AudioClip;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 public class Controller {
@@ -124,15 +129,43 @@ public class Controller {
         }
 
         sizeBox.getSelectionModel().selectedIndexProperty().addListener(e -> sizeChanged());
+        difficultyLevelBox.getSelectionModel().selectedIndexProperty().addListener(e -> difficultyLevelChanged());
 
         grid = new GridPane();
-//        grid.getRowConstraints().add(new RowConstraints(10));
-//        grid.getColumnConstraints().add(new ColumnConstraints(10));
+
+//        if(sizeBox.getValue() == "Small") {
+//            ColumnConstraints columnConstraints = new ColumnConstraints();
+//            columnConstraints.setFillWidth(true);
+//            for(int i = 0; i < column; i++) {
+//                grid.getColumnConstraints().add(columnConstraints);
+//            }
+//
+//            RowConstraints rowConstraints = new RowConstraints();
+//            rowConstraints.setFillHeight(true);
+//            for(int i = 0; i < row; i++) {
+//                grid.getRowConstraints().add(rowConstraints);
+//            }
+//       } // else if(sizeBox.getValue() == "Medium") {
+//            ColumnConstraints columnConstraints = new ColumnConstraints();
+//            columnConstraints.setPercentWidth(0.4);
+//            grid.getColumnConstraints().add(columnConstraints);
+//            RowConstraints rowConstraints = new RowConstraints();
+//            rowConstraints.setPercentHeight(0.4);
+//            grid.getRowConstraints().add(rowConstraints);
+//        } else if(sizeBox.getValue() == "Large") {
+//            ColumnConstraints columnConstraints = new ColumnConstraints();
+//            columnConstraints.setPercentWidth(0.5);
+//            grid.getColumnConstraints().add(columnConstraints);
+//            RowConstraints rowConstraints = new RowConstraints();
+//            rowConstraints.setPercentHeight(0.4);
+//            grid.getRowConstraints().add(rowConstraints);
+//        }
 
         for(int i = 0; i < row; i++) {
             for(int j = 0; j < column; j++) {
                 Cell buttonCell = mineField.getCell(i, j);
                 buttonCell.setOnMousePressed(e -> clickedCell(e));
+                buttonCell.setMinSize(grid.getBoundsInParent().getWidth(), grid.getBoundsInParent().getHeight());
                 grid.add(buttonCell, i, j);
             }
         }
@@ -142,11 +175,34 @@ public class Controller {
 
         grid.setHgap(0);
         grid.setVgap(0);
+        grid.setMinSize(gridPane.getBoundsInParent().getWidth(), gridPane.getBoundsInParent().getHeight());
         grid.setAlignment(Pos.CENTER);
         gridPane.setCenter(grid);
     }
 
+    private void difficultyLevelChanged() {
+        if(animationTimer == null) {
+            startButton.setText("Start");
+            firstClick = true;
+            mineField.endGame();
+            return;
+        }
+        animationTimer.stop();
+        long elapsedMillis = System.currentTimeMillis() - startTime;
+        endTime = Long.toString(elapsedMillis / 1000);
+        firstClick = true;
+        startButton.setText("Start");
+
+        mineField.endGame();
+    }
+
     private void sizeChanged() {
+        if(animationTimer == null) {
+            startButton.setText("Start");
+            firstClick = true;
+            mineField.endGame();
+            return;
+        }
         animationTimer.stop();
         long elapsedMillis = System.currentTimeMillis() - startTime;
         endTime = Long.toString(elapsedMillis / 1000);
